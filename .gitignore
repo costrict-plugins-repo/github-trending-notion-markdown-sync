@@ -1,0 +1,20 @@
+# Environment
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Eval workspace outputs
+**/eval-*/outputs/
+**/eval-*/timing.json
+**/eval-*/grading.json

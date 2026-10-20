@@ -1,0 +1,24 @@
+{
+  "name": "notion-markdown-sync",
+  "description": "Two-way markdown sync for Notion — push, pull, and round-trip local markdown files with Notion pages via the Markdown API. Auto-detects GFM vs Notion format, handles media uploads/downloads, icon replication, and database page properties.",
+  "author": {
+    "name": "K Manoj Kumar (VegaStack Inc.)",
+    "email": "hello@vegastack.com",
+    "url": "https://github.com/vegastack"
+  },
+  "homepage": "https://github.com/vegastack/oss-notion-markdown-sync",
+  "repository": "https://github.com/vegastack/oss-notion-markdown-sync",
+  "license": "MIT",
+  "keywords": [
+    "notion",
+    "markdown",
+    "sync",
+    "push",
+    "pull",
+    "two-way-sync",
+    "notion-api",
+    "markdown-api",
+    "gfm",
+    "documentation"
+  ]
+}

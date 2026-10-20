@@ -1,0 +1,79 @@
+{
+  "skill_name": "notion-markdown-sync",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have a markdown file at /tmp/test-notion-push.md that I want to push to Notion. The parent page ID is a1b2c3d4-e5f6-7890-abcd-ef1234567890. Create the page and update the local file with sync metadata.",
+      "expected_output": "Creates a Notion page via the markdown API, gets back the page ID and URL, then updates the local file's YAML frontmatter with notion_page_id, notion_url, notion_last_synced, and notion_parent_id fields.",
+      "files": ["/tmp/test-notion-push.md"],
+      "assertions": [
+        {"text": "Page was created successfully via POST /v1/pages with markdown parameter"},
+        {"text": "Used Notion-Version: 2026-03-11 header (markdown API version)"},
+        {"text": "Local file was updated with notion_page_id in YAML frontmatter"},
+        {"text": "Local file was updated with notion_url in YAML frontmatter"},
+        {"text": "Local file was updated with notion_last_synced timestamp in YAML frontmatter"},
+        {"text": "YAML frontmatter stripped before sending to Notion"},
+        {"text": "Used jq or python for proper JSON encoding of markdown content"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Pull the Notion page b2c3d4e5-f6a7-8901-bcde-f12345678901 to a local file at /tmp/pulled-from-notion.md. Include all the sync metadata in the frontmatter.",
+      "expected_output": "Retrieves the page markdown via GET /v1/pages/:id/markdown, checks for truncation and unknown blocks, writes the content to the local file with YAML frontmatter.",
+      "files": [],
+      "assertions": [
+        {"text": "Used GET /v1/pages/:page_id/markdown endpoint"},
+        {"text": "Used Notion-Version: 2026-03-11 header"},
+        {"text": "Checked truncated field in response"},
+        {"text": "Checked unknown_block_ids in response"},
+        {"text": "Written file includes YAML frontmatter with notion_page_id"},
+        {"text": "Written file includes notion_last_synced with ISO8601 timestamp"},
+        {"text": "Written file includes the actual markdown content from Notion"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I have this markdown file at /tmp/test-validate.md - can you validate it for Notion compatibility and tell me if there are any issues?",
+      "expected_output": "Reads the file, checks for H5/H6 headings, unsupported blocks, tab indentation, multi-line quotes, and reports pass/warn/fail results.",
+      "files": ["/tmp/test-validate.md"],
+      "assertions": [
+        {"text": "Detected H5 heading and warned about H4 conversion"},
+        {"text": "Detected H6 heading and warned about H4 conversion"},
+        {"text": "Detected multiple separate > quote lines creating separate blocks"},
+        {"text": "Detected space-indented list item instead of tab indentation"},
+        {"text": "Detected or warned about the <unknown> bookmark block"},
+        {"text": "Detected space-indented toggle children instead of tab-indented"},
+        {"text": "Confirmed valid blocks pass validation"},
+        {"text": "Provided a clear summary with pass/warn/fail counts"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Pull the Notion page b2c3d4e5-f6a7-8901-bcde-f12345678901 to /tmp/pulled-with-media.md and download all embedded media files locally so the URLs don't expire. Save them in an assets folder next to the markdown file.",
+      "expected_output": "Pulls the page markdown, then uses the media handler script to detect pre-signed S3 URLs, download media to assets/ directory, and rewrite markdown paths to local references.",
+      "files": [],
+      "assertions": [
+        {"text": "Pulled page markdown via GET /v1/pages/:id/markdown"},
+        {"text": "Detected pre-signed S3 URLs in the pulled content (or correctly reported none found)"},
+        {"text": "Used the notion_media.py script or equivalent logic to handle media download"},
+        {"text": "If media found: downloaded files to an assets/ directory relative to the markdown file"},
+        {"text": "If media found: rewrote markdown image/media URLs to local relative paths"},
+        {"text": "Written file includes YAML frontmatter with sync metadata"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I have a markdown file at /tmp/test-media-push/test-with-local-media.md that references a local image in assets/test-image.png. Push this to Notion under parent page a1b2c3d4-e5f6-7890-abcd-ef1234567890. Make sure the local image gets uploaded to Notion properly.",
+      "expected_output": "Detects local media references, uploads them via the File Upload API, resolves Notion-hosted URLs, replaces local paths, and pushes the full content.",
+      "files": ["/tmp/test-media-push/test-with-local-media.md", "/tmp/test-media-push/assets/test-image.png"],
+      "assertions": [
+        {"text": "Detected local image reference (assets/test-image.png) in the markdown"},
+        {"text": "Used the File Upload API or notion_media.py script to upload the local image"},
+        {"text": "Created the Notion page via POST /v1/pages with markdown parameter"},
+        {"text": "Used Notion-Version: 2026-03-11 header"},
+        {"text": "Local file was updated with notion_page_id in YAML frontmatter"},
+        {"text": "Image was uploaded to Notion (either via file upload flow or noted the limitation)"}
+      ]
+    }
+  ]
+}

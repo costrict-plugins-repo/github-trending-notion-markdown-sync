@@ -1,0 +1,27 @@
+{
+  "name": "vegastack-oss-notion-markdown-sync",
+  "owner": {
+    "name": "VegaStack Inc.",
+    "email": "hello@vegastack.com"
+  },
+  "metadata": {
+    "description": "Two-way markdown sync for Notion"
+  },
+  "plugins": [
+    {
+      "name": "notion-markdown-sync",
+      "source": "./",
+      "description": "Two-way markdown sync for Notion — push, pull, and round-trip local markdown files with Notion pages via the Markdown API",
+      "version": "1.0.0",
+      "author": {
+        "name": "K Manoj Kumar (VegaStack Inc.)"
+      },
+      "homepage": "https://github.com/vegastack/oss-notion-markdown-sync",
+      "repository": "https://github.com/vegastack/oss-notion-markdown-sync",
+      "license": "MIT",
+      "keywords": ["notion", "markdown", "sync", "push", "pull", "documentation"],
+      "category": "External integrations",
+      "tags": ["notion", "markdown", "sync", "two-way-sync", "notion-api"]
+    }
+  ]
+}
